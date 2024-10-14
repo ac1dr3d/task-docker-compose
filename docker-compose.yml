@@ -1,0 +1,106 @@
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper:latest
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - 2181:2181
+    networks:
+      - net1
+
+  kafka:
+    image: wurstmeister/kafka:latest
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - 9092:9092
+      - 29092:29092
+    networks:
+      - net1
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://kafka:29092
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,PLAINTEXT_HOST://0.0.0.0:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_DB: task
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: asdASD123
+    ports:
+      - 5432:5432
+    networks:
+      - net1
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  orders:
+    container_name: orders
+    build:
+      context: ./orders
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+      - kafka
+    ports:
+      - 8081:8081
+    networks:
+      - net1
+    # environment:
+    #   SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/task
+    #   SPRING_DATASOURCE_USERNAME: postgres
+    #   SPRING_DATASOURCE_PASSWORD: asdASD123
+    #   SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+    #   SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    #   SPRING_JPA_SHOW_SQL: "true"
+    #   SPRING_JPA_FORMAT_SQL: "true"
+    #   SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    #   SPRING_KAFKA_CONSUMER_GROUP_ID: task-group
+    #   SPRING_KAFKA_CONSUMER_AUTO_OFFSET_RESET: earliest
+    #   SPRING_SECURITY_USER_PASSWORD: asdASD123
+    #   TASK_APP_JWTSECRET: ====================Task=Spring=========================
+    #   TASK_APP_JWTEXPIRATIONMS: 86400000
+
+  users:
+    container_name: users
+    build:
+      context: ./users
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+      - kafka
+    ports:
+      - 8082:8082
+    networks:
+      - net1
+    # environment:
+    #   SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/task
+    #   SPRING_DATASOURCE_USERNAME: postgres
+    #   SPRING_DATASOURCE_PASSWORD: asdASD123
+    #   SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+    #   SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
+    #   SPRING_JPA_SHOW_SQL: "true"
+    #   SPRING_JPA_FORMAT_SQL: "true"
+    #   SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    #   SPRING_KAFKA_CONSUMER_GROUP_ID: task-group
+    #   SPRING_KAFKA_CONSUMER_AUTO_OFFSET_RESET: earliest
+    #   SPRING_SECURITY_USER_PASSWORD: asdASD123
+    #   TASK_APP_JWTSECRET: ====================Task=Spring=========================
+    #   TASK_APP_JWTEXPIRATIONMS: 86400000
+
+volumes:
+  postgres_data:
+networks:
+  net1:
+    driver: bridge
