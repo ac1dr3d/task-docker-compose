@@ -5,7 +5,7 @@ This repository contains a Docker Compose setup for two microservices: `orders` 
 ## Prerequisites
 - [Docker](https://www.docker.com/get-started)
 - [Docker Compose](https://docs.docker.com/compose/install/)
-- [Users](https://github.com/ac1dr3d/taks-users) & [Orders](https://github.com/ac1dr3d/taks-orders) projects in same directory using users/orders folder names.
+- [Users](https://github.com/ac1dr3d/task-users) & [Orders](https://github.com/ac1dr3d/task-orders) projects in same directory using users/orders folder names.
 
 ## Services Overview
 - **Orders Service**: Runs on `http://localhost:8081`
