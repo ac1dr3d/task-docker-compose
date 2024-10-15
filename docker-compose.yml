@@ -57,20 +57,6 @@ services:
       - 8081:8081
     networks:
       - net1
-    # environment:
-    #   SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/task
-    #   SPRING_DATASOURCE_USERNAME: postgres
-    #   SPRING_DATASOURCE_PASSWORD: asdASD123
-    #   SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
-    #   SPRING_JPA_HIBERNATE_DDL_AUTO: update
-    #   SPRING_JPA_SHOW_SQL: "true"
-    #   SPRING_JPA_FORMAT_SQL: "true"
-    #   SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
-    #   SPRING_KAFKA_CONSUMER_GROUP_ID: task-group
-    #   SPRING_KAFKA_CONSUMER_AUTO_OFFSET_RESET: earliest
-    #   SPRING_SECURITY_USER_PASSWORD: asdASD123
-    #   TASK_APP_JWTSECRET: ====================Task=Spring=========================
-    #   TASK_APP_JWTEXPIRATIONMS: 86400000
 
   users:
     container_name: users
@@ -84,20 +70,6 @@ services:
       - 8082:8082
     networks:
       - net1
-    # environment:
-    #   SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/task
-    #   SPRING_DATASOURCE_USERNAME: postgres
-    #   SPRING_DATASOURCE_PASSWORD: asdASD123
-    #   SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
-    #   SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
-    #   SPRING_JPA_SHOW_SQL: "true"
-    #   SPRING_JPA_FORMAT_SQL: "true"
-    #   SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
-    #   SPRING_KAFKA_CONSUMER_GROUP_ID: task-group
-    #   SPRING_KAFKA_CONSUMER_AUTO_OFFSET_RESET: earliest
-    #   SPRING_SECURITY_USER_PASSWORD: asdASD123
-    #   TASK_APP_JWTSECRET: ====================Task=Spring=========================
-    #   TASK_APP_JWTEXPIRATIONMS: 86400000
 
 volumes:
   postgres_data:
